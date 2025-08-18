@@ -33,16 +33,15 @@ CUDA_INCLUDEPATH=/usr/local/cuda/include
 
 NVCC_OPTS=-O3 -arch=sm_75 -Xcompiler -Wall -Xcompiler -Wextra -m64
 
-GCC_OPTS=-O3 -Wall -Wextra -m64
-CFLAGS=$(GCC_OPTS) -I $(CUDA_INCLUDEPATH) -I $(OPENCV_INCLUDEPATH)
+GCC_OPTS=-O3 -Wall -Wextra -m64 $(shell pkg-config --cflags opencv4)
 
-LDFLAGS = -L $(OPENCV_LIBPATH) $(OPENCV_LIBS)
+LDFLAGS = -L $(OPENCV_LIBPATH) $(OPENCV_LIBS) $(shell pkg-config --libs opencv4)
 
 student: main.o student_func.o compare.o reference_calc.o Makefile
-	$(NVCC) -o HW1 main.o student_func.o compare.o reference_calc.o -L $(OPENCV_LIBPATH) $(OPENCV_LIBS) $(NVCC_OPTS)
+	$(NVCC) -o HW1 main.o student_func.o compare.o reference_calc.o $(LDFLAGS) $(NVCC_OPTS)
 
 main.o: main.cpp timer.h utils.h reference_calc.cpp compare.cpp HW1.cpp
-	g++ -c main.cpp $(GCC_OPTS) -I $(CUDA_INCLUDEPATH) -I $(OPENCV_INCLUDEPATH) -L $(OPENCV_LIBPATH) $(OPENCV_LIBS)
+	g++ -c main.cpp $(GCC_OPTS) -I $(CUDA_INCLUDEPATH) -I $(OPENCV_INCLUDEPATH)
 
 student_func.o: student_func.cu utils.h
 	nvcc -c student_func.cu $(NVCC_OPTS)

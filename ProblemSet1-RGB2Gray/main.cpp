@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     uchar4 *h_rgbaImage, *d_rgbaImage;
     unsigned char *h_greyImage, *d_greyImage;
 
-    std::string input_file = "cinque_terre_gray.jpg";
+    std::string input_file = "cinque_terre_small.jpg";
     std::string output_file = "HW1_output.png";
     std::string reference_file = "HW1_reference.png";
     double perPixelError = 0.0;
